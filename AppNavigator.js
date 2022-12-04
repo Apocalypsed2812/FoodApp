@@ -10,17 +10,26 @@ import Orders from "./screens/Orders";
 import Settings from "./screens/Settings";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import FoodStore from "./screens/FoodStore";
+import ProductDetail from "./screens/ProductDetail";
 import Home from "./screens/Home";
 
 const color = {
     ACTIVE: '#147efb',
+    // ACTIVE: '#82FA58',
     INACTIVE: '#ccc'
 }
 
 const CategoryStack = createStackNavigator({
-    // Home: {
-    //     screen: Home
-    // },
+    Home: {
+        screen: Home
+    },
+    FoodStore: {
+        screen: FoodStore
+    },
+    ProductDetail: {
+        screen: ProductDetail
+    },
     Categories: {
         screen: Categories
     },
@@ -47,8 +56,8 @@ const CategoryStack = createStackNavigator({
 CategoryStack.navigationOptions = {
     tabBarLabel: 'Home',
     tabBarIcon: ({focused}) => {
-        return <Icon name="ios-planet"
-            size={36}
+        return <Icon name="ios-home"
+            size={28}
             color={focused ? color.ACTIVE : color.INACTIVE}
         />
     }
@@ -65,7 +74,7 @@ CartStack.navigationOptions = {
     tabBarLabel: 'Cart',
     tabBarIcon: ({focused}) => {
         return <Icon name="ios-cart"
-            size={36}
+            size={30}
             color={focused ? color.ACTIVE : color.INACTIVE}
         />
     }
@@ -82,7 +91,7 @@ OrderStack.navigationOptions = {
     tabBarLabel: 'Orders',
     tabBarIcon: ({focused}) => {
         return <Icon name="ios-wallet"
-            size={36}
+            size={30}
             color={focused ? color.ACTIVE : color.INACTIVE}
         />
     }
@@ -92,6 +101,9 @@ const SettingStack = createStackNavigator({
     Settings: {
         screen: Settings
     },
+    // Login: {
+    //     screen: Login
+    // },
 })
 
 
@@ -99,7 +111,7 @@ SettingStack.navigationOptions = {
     tabBarLabel: 'Settings',
     tabBarIcon: ({focused}) => {
         return <Icon name="ios-cog"
-            size={36}
+            size={30}
             color={focused ? color.ACTIVE : color.INACTIVE}
         />
     }

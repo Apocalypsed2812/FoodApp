@@ -2,19 +2,19 @@ import React from "react";
 import {Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 //source={{uri: product.images[0].url}}
 function ProductItem(props){
-    const {product, onPress} = props
+    const {product} = props
+    console.log(product)
     return (
         <View style={styles.shadow}>
             <View style={styles.container}>
-                <Image style={styles.img}/>
+                <Image style={styles.img} source={{uri: product.image_url}}/>
                 <View style={styles.info}>
-                    <Text style={styles.name}>{product.name}</Text>
-                    <View style={styles.priceRow}>
-                        <Text style={styles.price}>{product.price}</Text>
-                        <TouchableOpacity onPress={onPress}>
-                            <Text style={styles.cartText}>MUA +</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <Text style={styles.name}>Tên: {product.name}</Text>
+                    <Text style={styles.price}>Giá: {product.price} VNĐ</Text>
+                    <Text style={styles.description}>Mô tả: {product.description}</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.cartText}>Thêm vào giỏ hàng +</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -27,7 +27,15 @@ const styles = StyleSheet.create({
     cartText: {
         textTransform: 'uppercase',
         fontSize: 16,
-        color: '#2f95dc'
+        color: '#2f95dc',
+        width: '100%',
+        textAlign: 'center',
+        marginTop: 32,
+        borderColor: '#2f95dc',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        paddingVertical: 16,
+        
     },
     shadow: {
         shadowColor: '#000',
@@ -36,16 +44,22 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 0, height: 0}
     },
     container: {
+        width: '100%',
+        height: '100%',
         marginBottom: 20,
+        paddingHorizontal: 16,
         borderRadius: 4,
         backgroundColor: '#FFF',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems:'center'
     },
     info: {
         padding: 8
     },
     img: {
-        height: 150,
+        height: 300,
+        width: 300,
         borderTopLeftRadius: 4,
         borderBottomLeftRadius: 4
     },
@@ -53,13 +67,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 8
     },
-    priceRow: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
     price: {
         fontSize: 16,
         color: '#888',
-        flex: 1
+    },
+    description: {
+        marginVertical: 16,
+        textAlign: 'justify'
     }
 });

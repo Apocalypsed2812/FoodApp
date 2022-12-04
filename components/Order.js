@@ -8,7 +8,6 @@ function Order(props){
   console.log(order.product)
     return (
         <>
-        <TouchableOpacity>
           <View style={styles.wrapper}>
             <View style={styles.container}>
               {order.product.map((order, index) => {
@@ -18,19 +17,24 @@ function Order(props){
                     <View style={styles.content}>
                       <Text style={styles.heading}>{order.name}</Text>
                       <Text style={styles.quantity}>x {order.quantity}</Text>
-                      <Text style={styles.price}>{order.price}</Text>
+                      <Text style={styles.price}>{order.price}.000</Text>
                     </View>
                   </View>
                 )
               })}
                 <View style={styles.total}>
-                  <Text>Thành tiền: 
-                    <Text style={styles.totalPrice}>{order.total}K</Text>
+                  <Text>
+                    <Text>Thành tiền: </Text>
+                    <Text style={styles.totalPrice}>{order.total}.000</Text>
                   </Text>
+                  <TouchableOpacity>
+                    <Text style={styles.detail}> 
+                      Chi tiết
+                    </Text>
+                  </TouchableOpacity>
                 </View>
             </View>
           </View>
-        </TouchableOpacity>
         </>
     )
 }
@@ -41,19 +45,27 @@ const styles = StyleSheet.create({
     wrapper: {
     },
     container: {
-        marginTop: 8,
         flex: 1,
         backgroundColor: '#FFF',
         width: '100%',
+        paddingHorizontal: 16,
+        marginBottom: 8,
     },
     product: {
       flexDirection: 'row',
-      marginBottom: 8,
+      marginBottom: 12,
     },
     content: {
       flex: 1,
       paddingHorizontal: 12,
       paddingVertical: 4,
+    },
+    heading: {
+      fontSize: 16,
+      fontWeight: '500',
+    },
+    price: {
+      color: '#ccc',
     },
     image: {
       width: 64,
@@ -62,11 +74,22 @@ const styles = StyleSheet.create({
     }, 
     total: {
       textAlign: 'right',
-      padding: 8,
+      paddingBottom: 8,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
     },
     totalPrice: {
       color: '#147efb',
-      marginLeft: 4,
+      marginLeft: 8,
     },
+    detail: {
+      borderColor: 'green',
+      borderWidth: 1,
+      color: 'green',
+      paddingHorizontal: 8,
+      paddingVertical: 4
+    }
 })
 

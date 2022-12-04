@@ -1,11 +1,23 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import {Image, Text, View, StyleSheet, TextInput } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //import SkiiImage from '../assets/skii.png'
 import TDTU from '../assets/logo_tdtu.jpg'
+import { getMethod, postMethod } from "../utils/fetchData";
+import {GlobalState} from '../context/GlobalState'
 
-function Header({checkLogin, user, settings}){
+function Header({checkLogin, settings}){
+    const state = useContext(GlobalState)
+    const [isLogin, setIsLogin] = state.UserAPI.login;
+    const [user, setUser] = state.UserAPI.user;
+    // console.log("User", user)
+    // const logout = () => {
+    //   AsyncStorage.clear();
+    //   setIsLogin(false)
+    //   navigation.navigate('Login')
+    // }
     return (
         <View style={styles.container}>
             <TextInput
@@ -14,7 +26,7 @@ function Header({checkLogin, user, settings}){
               placeholder="Tìm kiếm"
               //value={"Nhập username"}
             />
-            {user 
+            {isLogin 
             ? 
             <FontAwesome5 
               name="user-circle" 

@@ -1,12 +1,81 @@
 import React, { useState, useEffect } from "react";
-import {Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity} from 'react-native'
+import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ToastAndroid } from 'react-native'
 
 //import Register from '../components/Register';
+import { getMethod, postMethod } from "../utils/fetchData";
 
 export default function RegisterScreen({navigation}){
   RegisterScreen.navigationOptions = {
         title: 'Register'
-    }
+  }
+
+    // const [showPassword, setShowPassword] = useState(false);
+    // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [user, setUser] = useState({
+      username: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
+  });
+  const handleChangeInput = (name, value) => {
+      setUser({ ...user, [name]: value });
+  };
+  const handleRegister = () => {
+      postMethod("register", {
+          username: user.username,
+          password: user.password,
+          name: user.name,
+          email: "",
+      })
+          .then((res) => {
+              if (res.success) {
+                  // Swal.fire({
+                  //     title: "Success",
+                  //     text: "Account was registered successfully",
+                  //     icon: "success",
+                  // });
+                  setUser({
+                      username: "",
+                      password: "",
+                      confirmPassword: "",
+                      name: "",
+                  });
+                  navigation.navigate("Login");
+              } else {
+                  // Swal.fire({
+                  //     title: "Error",
+                  //     text: res.message,
+                  //     icon: "error",
+                  // });
+                  ToastAndroid.show(response.message, ToastAndroid.SHORT)
+              }
+          })
+          .catch((err) => console.log(err));
+  };
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      if (user.username.trim() === "") {
+          ToastAndroid.show('Vui lòng nhập username', ToastAndroid.SHORT)
+          return;
+      }
+      if (user.password.trim() === "") {
+          ToastAndroid.show('Vui lòng nhập password', ToastAndroid.SHORT)
+          return;
+      }
+      if (user.password.trim().length < 6) {
+          ToastAndroid.show('Vui lòng nhập lại password', ToastAndroid.SHORT)
+          return;
+      }
+      if (user.password.trim() !== user.confirmPassword.trim()) {
+          ToastAndroid.show('Mật khẩu nhập không khớp', ToastAndroid.SHORT)
+          return;
+      }
+      if (user.name.trim() === "") {
+          ToastAndroid.show('Vui lòng nhập tên', ToastAndroid.SHORT)
+          return;
+      }
+      handleRegister();
+  };
    
   return (
     <View style={styles.container}>
@@ -14,26 +83,32 @@ export default function RegisterScreen({navigation}){
             <Text style={styles.container__form_heading}>Đăng kí</Text>
             <TextInput
               style={styles.input}
-              //onChangeText={onChangeText}
+              onChangeText={(text) => handleChangeInput('username', text)}
               placeholder="Nhập username"
-              //value={"Nhập username"}
+              value={user.username}
             />
             <TextInput
               style={styles.input}
-              //onChangeText={onChangeText}
+              onChangeText={(text) => handleChangeInput('password', text)}
               placeholder="Nhập password"
-              //value={"Nhập password"}
+              value={user.password}
             />
             <TextInput
               style={styles.input}
-              //onChangeText={onChangeText}
+              onChangeText={(text) => handleChangeInput('confirmPassword', text)}
               placeholder="Nhập lại password"
-              //value={"Nhập password"}
+              value={user.confirmPassword}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => handleChangeInput('name', text)}
+              placeholder="Nhập tên"
+              value={user.name}
             />
         </View>
         <View style={styles.container__button}>
           <TouchableOpacity> 
-            <Text style = {styles.btn__register}>
+            <Text style = {styles.btn__register} onPress={handleSubmit}>
                 Register
             </Text>
           </TouchableOpacity >

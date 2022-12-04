@@ -5,63 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import CategoryListItem from '../components/CategoryListItem';
 import Header from '../components/Header';
-
-// export default class Categories extends React.Component {
-//   static navigationOptions = ({ navigation, screenProps }) => ({
-//       headerTitle: 
-//       () => 
-//       <Header 
-//         checkLogin={() => navigation.navigate('Login')} 
-//         user={navigation.state.params}
-//         settings={() => navigation.navigate('Settings')} 
-//       />,
-//       headerStyle: {backgroundColor: '#5fb8f4'},
-//   });
-
-//     constructor(props){
-//         super(props);
-//         this.state = {
-//           categories: [
-//               {id: 1, name: 'Dụng cụ trượt tuyết'},
-//               {id: 2, name: 'Quần áo trượt tuyết'},
-//               {id: 3, name: 'Kính mũ'},
-//           ]
-//           //categories: []
-//         };
-//     }
-
-//     // componentDidMount(){
-//     //   axios.get()
-//     //     .then(res => {
-//     //       this.setState({
-//     //         categories: res.data
-//     //       })
-//     //     })
-//     //     .catch(error => {
-//     //       console.error(error)
-//     //     })
-//     // }
-
-//   render() {
-//     const {navigation} = this.props
-//     const {categories} = this.state
-//     return (
-//         <FlatList 
-//           data={categories}
-//           renderItem={({item}) => 
-//             <CategoryListItem 
-//                 category={item}
-//                 onPress={() => navigation.navigate('Category', {
-//                     categoryName: item.name,
-//                     categoryId: item.id,
-//                 })} />
-//             }
-//           keyExtractor={item => item.id}
-//           contentContainerStyle={styles.container}
-//         />
-//     );
-//   }
-// }
+import { getMethod, postMethod } from "../utils/fetchData";
 
 export default function Categories({navigation}) {
   Categories.navigationOptions = ({ navigation, screenProps }) => ({
@@ -79,11 +23,22 @@ export default function Categories({navigation}) {
     //const navigation = useNavigation();
 
     useEffect(() => {
-        setCategories([
-            {id: 1, name: 'Dụng cụ trượt tuyết'},
-            {id: 2, name: 'Quần áo trượt tuyết'},
-            {id: 3, name: 'Kính mũ'},
-        ])
+      const getProducts = async () => {
+        let response = await getMethod("product")
+        return response
+    }
+    getProducts()
+        .then(res => {
+            if (res.success) {
+                // setProducts(res.products)
+                // setProductsShow(res.products)
+                console.log(res.products)
+                setCategories(res.products)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }, [])
     
     return (
@@ -91,10 +46,12 @@ export default function Categories({navigation}) {
           data={categories}
           renderItem={({item}) => 
             <CategoryListItem 
+                key={item._id}
                 category={item}
                 onPress={() => navigation.navigate('Category', {
                     categoryName: item.name,
                     categoryId: item.id,
+                    product: item 
                 })} 
                 />
             }

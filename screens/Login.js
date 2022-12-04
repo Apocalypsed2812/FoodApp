@@ -1,43 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, AsyncStorage, ToastAndroid } from 'react-native'
+import React, { useState, useEffect, useContext } from "react";
+import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ToastAndroid } from 'react-native'
 import { getMethod, postMethod } from "../utils/fetchData";
-import { TOKEN_NAME } from "../credentials";
+// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { TOKEN_NAME } from "../credentials";
+import {GlobalState} from '../context/GlobalState'
 //import Login from '../components/Login';
 import TDTU from '../assets/logo_tdtu.jpg'
 
 export default function LoginScreen({navigation}){
-  LoginScreen.navigationOptions = {
-        title: 'Login'
-    }
-  
     const [user, setUser] = useState({ username: "", password: "" });
-    //const [isLogin, setIsLogin] = login;
-    const [isLogin, setIsLogin] = useState(false);
-    const handleChangeInput = (e) => {
+    const state = useContext(GlobalState)
+    const [isLogin, setIsLogin] = state.UserAPI.login;
+    console.log("Is Login Page: ", isLogin)
+    const handleChangeInput = (name, value) => {
         setUser({
             ...user,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     };
 
-      const handleLogin = () => {
-        postMethod("login", user)
-            .then((response) => {
-                if (response.success) {
-                    localStorage.setItem(TOKEN_NAME, response.token);
-                    setIsLogin(true);
-                    navigation.navigate("Categories");
-                } else {
-                    // Swal.fire({
-                    //     title: "Error",
-                    //     text: response.message,
-                    //     icon: "error",
-                    // });
-                    console.log("Co loi xay ra")
-                }
-            })
-            .catch((err) => console.log(err));
+      const handleLogin = async () => {
+          const response = await postMethod("login", user)
+          if (response.success) {
+              try{
+                console.log("Token là: ", response.token)
+                await AsyncStorage.setItem(TOKEN_NAME, response.token);
+                console.log(await AsyncStorage.getItem(TOKEN_NAME));
+                setIsLogin(true);
+                navigation.navigate("Home");
+              }
+              catch(error){
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+              }
+          } else {
+              // Swal.fire({
+              //     title: "Error",
+              //     text: response.message,
+              //     icon: "error",
+              // });
+              // console.log("Co loi xay ra")
+              ToastAndroid.show(response.message, ToastAndroid.SHORT)
+          }
+            // .then((response) => {
+            //     // console.log("Response là:", response)
+            //     if (response.success) {
+            //         try{
+            //           console.log("Token là: ", response.token)
+            //           await AsyncStorage.setItem(TOKEN_NAME, JSON.stringify(response.token));
+            //           console.log(await AsyncStorage.getItem(TOKEN_NAME));
+            //           setIsLogin(true);
+            //           navigation.navigate("Home");
+            //         }
+            //         catch(error){
+            //           ToastAndroid.show(error, ToastAndroid.SHORT);
+            //         }
+            //     } else {
+            //         // Swal.fire({
+            //         //     title: "Error",
+            //         //     text: response.message,
+            //         //     icon: "error",
+            //         // });
+            //         // console.log("Co loi xay ra")
+            //         ToastAndroid.show(response.message, ToastAndroid.SHORT)
+            //     }
+            // })
+            // .catch((err) => console.log(err));
     };
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -51,24 +80,28 @@ export default function LoginScreen({navigation}){
         }
         handleLogin();
     };
+
+    LoginScreen.navigationOptions = {
+      title: 'Login'
+    }
     
     return (
       <View style={styles.container}>
             <View style={styles.container__form}>
               <Image style={styles.form__image} source={TDTU}/>
               <TextInput
-              style={styles.input}
-              onChangeText={handleChangeInput}
-              placeholder="Nhập username"
-              name="username"
-            />
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChangeInput}
-              placeholder="Nhập password"
-              name="password"
-            />
-            <Text style={styles.forgot}>Quên mật khẩu ?</Text>
+                style={styles.input}
+                onChangeText={(text) => handleChangeInput('username', text)}
+                placeholder="Nhập username"
+                value={user.username}
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => handleChangeInput('password', text)}
+                placeholder="Nhập password"
+                value={user.password}
+              />
+              <Text style={styles.forgot}>Quên mật khẩu ?</Text>
             </View>
             <View style={styles.container__button}>
               <TouchableOpacity> 

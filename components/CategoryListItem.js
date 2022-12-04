@@ -5,11 +5,13 @@ import SkiiImage from '../assets/skii.png'
 
 function CategoryListItem(props){
     const {category, onPress} = props
+    console.log("Category", category)
     return (
         <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
             <View style={styles.container}>
+                <Image style={styles.categoryImage} source={{uri: category.image_url}}/>
                 <Text style={styles.title}>{category.name}</Text>
-                <Image style={styles.categoryImage} source={SkiiImage}/>
+                {/* <Text style={styles.price}>{category.price} VND</Text>  */}
             </View>
         </TouchableOpacity>
     )
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
     },
     categoryImage:{
         width: 64,
-        height: 64
+        height: 64,
     },
     title:{
         textTransform: 'uppercase',

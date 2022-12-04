@@ -1,104 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, FlatList, Alert, Image, Text, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 
+import TDTU from '../assets/logo_tdtu.jpg';
+import {GlobalState} from '../context/GlobalState'
 import ProductItem from '../components/ProductItem';
-
-// export default class Category extends React.Component {
-//     static navigationOptions = ({navigation}) => {
-//         return {
-//             title: navigation.getParam('categoryName')
-//         };
-//     };
-    
-//     constructor(props){
-//         super(props);
-//         this.state = {
-//             products: [
-//                 {
-//                     id: 1, 
-//                     image: [
-//                         {
-//                             url: ''
-//                         }
-//                     ],
-//                     name: 'Dụng cụ trượt tuyết',
-//                     price: '50000',
-//                     categoryId: 1,
-//                 },
-//                 {
-//                     id: 2, 
-//                     image: [
-//                         {
-//                             url: ''
-//                         }
-//                     ],
-//                     name: 'Quần áo trượt tuyết',
-//                     price: '30000',
-//                     categoryId: 1,
-//                 },
-//                 {
-//                     id: 1, 
-//                     image: [
-//                         {
-//                             url: ''
-//                         }
-//                     ],
-//                     name: 'Dụng cụ trượt tuyết 2',
-//                     price: '50000',
-//                     categoryId: 2,
-//                 },
-//                 {
-//                     id: 2, 
-//                     image: [
-//                         {
-//                             url: ''
-//                         }
-//                     ],
-//                     name: 'Quần áo trượt tuyết 2',
-//                     price: '30000',
-//                     categoryId: 2,
-//                 },
-//             ]
-//         };
-//     }
-
-//     render() {
-//         const {navigation} = this.props
-//         const id = navigation.getParam('categoryId')
-//         console.log(id)
-//         const userLogin = false
-//         const handleAddToCart = () => {
-//           if(!userLogin){
-//             //console.log(userLogin)
-//             Alert.alert(
-//               "Error",
-//               "Vui lòng đăng nhập để thực hiện chức năng này",
-//               [
-//                 {
-//                   text: "Cancel",
-//                   onPress: () => console.log("Cancel Pressed"),
-//                   style: "cancel"
-//                 },
-//                 { text: "OK", onPress: () => console.log("OK Pressed") }
-//               ]
-//             );
-//           }
-//         }
-//         return (
-//             <FlatList 
-//                 data={this.state.products.filter(item => item.categoryId === id)}
-//                 contentContainerStyle={styles.container}
-//                 numColumns={2}
-//                 renderItem={({item}) => 
-//                     <View style={styles.wrapper}>
-//                         <ProductItem product={item} onPress={handleAddToCart}/>
-//                     </View>
-//                 }
-//                 keyExtractor={item => item.id}
-//             />
-//         );
-//     }
-// }
+import { getMethod, postMethod } from "../utils/fetchData";
 
 export default function Category({navigation}) {
     Category.navigationOptions = ({navigation}) => {
@@ -107,100 +13,128 @@ export default function Category({navigation}) {
         };
     };
 
-    const [products, setProducts] = useState([]);
+    const state = useContext(GlobalState)
+    const isLogin = state.UserAPI.login[0];
+    const [cart, setCart] = state.UserAPI.cart;
+    const [products, setProducts] = state.ProductAPI.products;
 
-    useEffect(() => {
-        setProducts([
-            {
-                id: 1, 
-                image: [
-                    {
-                        url: ''
-                    }
-                ],
-                name: 'Dụng cụ trượt tuyết',
-                price: '50000',
-                categoryId: 1,
-            },
-            {
-                id: 2, 
-                image: [
-                    {
-                        url: ''
-                    }
-                ],
-                name: 'Quần áo trượt tuyết',
-                price: '30000',
-                categoryId: 1,
-            },
-            {
-                id: 1, 
-                image: [
-                    {
-                        url: ''
-                    }
-                ],
-                name: 'Dụng cụ trượt tuyết 2',
-                price: '50000',
-                categoryId: 2,
-            },
-            {
-                id: 2, 
-                image: [
-                    {
-                        url: ''
-                    }
-                ],
-                name: 'Quần áo trượt tuyết 2',
-                price: '30000',
-                categoryId: 2,
-            },
-        ])
-    }, [])
-
-    const id = navigation.getParam('categoryId')
-    console.log(id)
-    const userLogin = false
-    const handleAddToCart = () => {
-        if(!userLogin){
-        //console.log(userLogin)
-        Alert.alert(
-            "Error",
-            "Vui lòng đăng nhập để thực hiện chức năng này",
-            [
-            {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-        );
+    let categoryName = navigation.getParam('categoryName')
+    
+    let productList = products.filter((item, index) => (
+        item.category == categoryName
+    ))
+    
+    const handleAddToCart = (id) => {
+        console.log("Id category add to cart is: ", id)
+        if (!isLogin) {
+            ToastAndroid.show('Vui lòng đăng nhập để tiếp tục', ToastAndroid.SHORT)
+            return;
         }
-    }
+        postMethod('add-to-cart', { product_id: id })
+            .then((res) => {
+                if (res.success) {
+                    setCart([...cart, id]);
+                    navigation.navigate('Cart')
+                } else {
+                    ToastAndroid.show(res.message, ToastAndroid.SHORT)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
-        <FlatList 
-            data={products.filter(item => item.categoryId === id)}
-            contentContainerStyle={styles.container}
-            numColumns={2}
-            renderItem={({item}) => 
-                <View style={styles.wrapper}>
-                    <ProductItem product={item} onPress={handleAddToCart}/>
-                </View>
-            }
-            keyExtractor={item => item.id}
-        />
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.product__row}>
+                {productList.map((item, index) => (
+                    <TouchableOpacity style={styles.product__col_6} key={index} onPress={() => {navigation.navigate("ProductDetail", {product: item})}}>
+                        <View style={styles.product}>
+                            <Image style={styles.product__image} source={{uri: item.image_url}}/>
+                            <Text style={styles.product__title}>{item.name}</Text>
+                            <Text style={styles.product__price}>{item.price} đ</Text>
+                            <Text style = {styles.product__btn} onPress={() => handleAddToCart(item._id)}>
+                                Thêm
+                            </Text>
+                        </View>
+                    </TouchableOpacity>    
+                ))}
+            </View>
+          </View>
+        </ScrollView>
     );
 
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 8,
-    paddingTop: 16
-  },
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
+      backgroundColor: '#fff',
+      paddingHorizontal: 16,
+      boxSizing: 'border-box',
+    },
   wrapper:{
     flex: 1,
     paddingHorizontal: 8
-  }
+  },
+  product__row: {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: 16,
+    flexDirection: 'row',
+    marginHorizontal: -4,
+    paddingLeft: 8,
+  },
+  product__col_6: {
+      width: '50%',
+      height: 200,
+      paddingHorizontal: 4,
+      marginBottom: 20,
+  },
+  product: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+      shadowOffset: {width: 0, height: 0},
+      // borderColor: '#ccc',
+      // borderWidth: 1,
+      paddingVertical: 16,
+  },
+  product__image: {
+      // flex: 1,
+      // width: null,
+      // height: null,
+      // resizeMode: 'cover',
+      width: 100,
+      height: 64,
+  },
+  product__title: {
+      fontSize: 20,
+      marginVertical: 16,
+      height: 30,
+  },
+  product__price: {
+
+  },
+  product__btn: {
+      width: '100%',
+      backgroundColor: 'transparent',
+      color: 'green',
+      borderColor: 'green',
+      borderWidth: 1,
+      borderRadius: 16,
+      marginVertical: 16,
+      textAlign: 'center',
+      paddingVertical: 4,
+  },
 });

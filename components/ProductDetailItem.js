@@ -1,8 +1,8 @@
 import React from "react";
 import {Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 //source={{uri: product.images[0].url}}
-function ProductDetail(props){
-    const {product, onPress} = props
+function ProductDetailItem(props){
+    const {product} = props
     return (
         <View style={styles.shadow}>
             <View style={styles.container}>
@@ -21,7 +21,7 @@ function ProductDetail(props){
     )
 }
 
-export default ProductDetail
+export default ProductDetailItem
 
 const styles = StyleSheet.create({
     cartText: {
