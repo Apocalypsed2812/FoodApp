@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
 import axios from 'axios';
-import { Text, FlatList, StyleSheet, View, Button, Image, ScrollView, ToastAndroid } from 'react-native';
+import { Text, FlatList, StyleSheet, View, Button, Image, ScrollView, ToastAndroid, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 import TDTU from '../assets/logo_tdtu.jpg';
@@ -14,12 +14,7 @@ export default function CartScreen({navigation}){
     const [cartList, setCartList] = useState([]);
     const globalProducts = state.ProductAPI.products[0];
 
-    console.log("Is Login Cart: ", isLogin)
-    // if(!isLogin){
-    //   // navigation.navigate('Login')
-    //   ToastAndroid.show('Vui lòng đăng nhập cart để tiếp tục', ToastAndroid.SHORT)
-    //   return
-    // }
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
       const getCart = async () => {
@@ -139,9 +134,43 @@ export default function CartScreen({navigation}){
           </ScrollView>
           <View style={styles.total}>
             <Text style={styles.totalPrice}>Tổng tiền: {totalPrice}</Text>
-            <Button style={styles.button} title='Đặt hàng'/>
+            <Button style={styles.button} title='Đặt hàng' onPress={() => setModalVisible(true)} />
           </View>
-          </>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <TouchableOpacity style={styles.modal__overlay} onPress={() => setModalVisible(!modalVisible)}>
+            </TouchableOpacity>
+              <View style={styles.modal__container}>
+                <Text style={styles.modal__container_heading}>Vui lòng nhập thông tin</Text>
+                <TextInput
+                  style={styles.input}
+                  // onChangeText={(text) => handleChangeInput('username', text)}
+                  placeholder="Nhập tên của bạn"
+                  //value={user.username}
+                />
+                <TextInput
+                  style={styles.input}
+                  // onChangeText={(text) => handleChangeInput('password', text)}
+                  placeholder="Nhập số điền thoại của bạn"
+                  //value={user.password}
+                />
+                <TextInput
+                  style={styles.input}
+                  // onChangeText={(text) => handleChangeInput('password', text)}
+                  placeholder="Nhập địa chỉ của bạn"
+                  //value={user.password}
+                />
+                <Text style={styles.button}>Đặt hàng</Text>
+              </View>
+          </Modal>
+          </>  
         ) : (
           <View style={styles.is__login}>
             <Image style={styles.is__login_img} source={TDTU}/>
@@ -282,5 +311,61 @@ const styles = StyleSheet.create({
   is__login_img:{
     width: 100,
     height: 100,
-  }
+  },
+  modal__container: {
+    width: '100%',
+    backgroundColor: '#fff',
+    position: 'absolute',
+    bottom: 0,
+    height: 450,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    display: 'flex',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  modal__overlay: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    bottom: 450,
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  modal__container_heading: {
+    width: '100%',
+    textAlign: 'center',
+    lineHeight: 40,
+    color: 'green',
+    fontSize: 20,
+    fontWeight: '550',
+    marginVertical: 30,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    width: '90%',
+    paddingVertical: 10,
+    paddingLeft: 24,
+    borderRadius: 24,
+    backgroundColor: '#fff',
+    color: 'black',
+    outline: 'none',
+    borderColor: '#ccc',
+    borderWidth: 1,
+  },
+  button: {
+    height: 40,
+    marginTop: 50,
+    paddingVertical: 10,
+    paddingHorizontal: 100,
+    borderRadius: 24,
+    backgroundColor: '#fff',
+    color: 'black',
+    outline: 'none',
+    borderColor: 'green',
+    borderWidth: 1,
+    textTransform: 'uppercase',
+    color: 'green',
+  },
 });
