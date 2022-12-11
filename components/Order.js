@@ -5,7 +5,6 @@ import SkiiImage from '../assets/skii.png'
 
 function Order(props){
   const {order} = props
-  console.log(order.product)
     return (
         <>
           <View style={styles.wrapper}>
@@ -13,11 +12,11 @@ function Order(props){
               {order.product.map((order, index) => {
                 return (
                   <View style={styles.product} key={index}>
-                    <Image style={styles.image} source={SkiiImage}/>
+                    <Image style={styles.image} source={{uri:order.image_url}}/>
                     <View style={styles.content}>
                       <Text style={styles.heading}>{order.name}</Text>
                       <Text style={styles.quantity}>x {order.quantity}</Text>
-                      <Text style={styles.price}>{order.price}.000</Text>
+                      <Text style={styles.price}>{order.price}</Text>
                     </View>
                   </View>
                 )
@@ -25,7 +24,7 @@ function Order(props){
                 <View style={styles.total}>
                   <Text>
                     <Text>Thành tiền: </Text>
-                    <Text style={styles.totalPrice}>{order.total}.000</Text>
+                    <Text style={styles.totalPrice}>{order.total}</Text>
                   </Text>
                   <TouchableOpacity>
                     <Text style={styles.detail}> 
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
     heading: {
       fontSize: 16,
       fontWeight: '500',
+      height: 22,
     },
     price: {
       color: '#ccc',

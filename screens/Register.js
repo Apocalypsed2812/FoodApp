@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ToastAndroid } from 'react-native'
 
-//import Register from '../components/Register';
 import { getMethod, postMethod } from "../utils/fetchData";
 
 export default function RegisterScreen({navigation}){

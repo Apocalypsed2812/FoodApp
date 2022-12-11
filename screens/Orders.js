@@ -11,51 +11,23 @@ export default function OrdersScreen({navigation}){
         title: 'Orders'
     };
 
-    const [orders, setOrders] = useState([]);
     const state = useContext(GlobalState);
     const isLogin = state.UserAPI.login[0];
+    const [orders, setOrders] = state.OrderAPI.orders;
+    const [user, setUser] = state.UserAPI.user;
 
-    console.log("Is Login Order: ", isLogin)
-    // if(!isLogin){
-    //   navigation.navigate('Login')
-    //   return
-    // }
-
-    useEffect(() => {
-      setOrders([
-        {
-          id: 1,
-          product: [
-            {
-              id: 1,
-              name: 'Dụng cụ trượt tuyết siêu tốt',
-              price: 500,
-              quantity: 2,
-            },
-            
-          ],
-          total: 800,
-        },
-        {
-          id: 2,
-          product: [
-            {
-              id: 3,
-              name: 'Dụng cụ trượt tuyết siêu tốt',
-              price: 500,
-              quantity: 2,
-            },
-            {
-              id: 4,
-              name: 'Dụng cụ trượt tuyết siêu rẻ',
-              price: 200,
-              quantity: 3,
-            },
-          ],
-          total: 700,
-        },
-    ])
-    }, [])
+    let orderList = []
+    if(user){
+      orders.forEach(item => {
+        if(item.user_id == user._id){
+          orderList.push(item)
+        }
+      })
+    }
+  
+    // console.log("Orders là:", orders)
+    // console.log("User là:", user)
+    // console.log("Orders List là:", orderList)
  
     return (
       (isLogin ? (
@@ -68,13 +40,13 @@ export default function OrdersScreen({navigation}){
           <Text style={styles.line}></Text>
         </View>
         <FlatList 
-          data={orders}
+          data={orderList}
           renderItem={({item}) => 
             <Order 
                 order={item}
             />
             }
-          keyExtractor={item => item.id}
+          keyExtractor={item => item._id}
         />
       </>
       ) : (

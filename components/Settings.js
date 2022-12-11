@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useContext } from "react";
 import {Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ScrollView, Modal } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
@@ -8,16 +8,60 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Foundation } from '@expo/vector-icons'; 
 import { Fontisto } from '@expo/vector-icons'; 
 import { Entypo } from '@expo/vector-icons'; 
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-// import { faBlind, faCartShopping, faList, faMoneyBill, faMotorcycle, faPen, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-// import { faSalesforce } from "@fortawesome/free-brands-svg-icons";
 
+import {GlobalState} from '../context/GlobalState'
+import { postMethod } from "../utils/fetchData";
 import TDTU from '../assets/logo_tdtu.jpg'
 
 function Settings(props){
-    const {info, handleHome, handleCart, handleOrder, onPressLogOut} = props
+    const {info, setInfo, handleHome, handleCart, handleOrder, onPressLogOut} = props
+
+    const state = useContext(GlobalState)
+    const [user, setUser] = state.UserAPI.user
+
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
-    // console.log(info)
+
+    const handleChangePhone = (name, value) => {
+      setPhone(value)
+    }
+
+    const handleChangeEmail = (name, value) => {
+      setEmail(value)
+    }
+
+    const handleChangeInfo = () => {
+      if (phone.trim() === "") {
+          ToastAndroid.show("Số điện thoại không được trống", ToastAndroid.SHORT)
+          return;
+      }
+      if (email.trim() === "") {
+        ToastAndroid.show("Email không được trống", ToastAndroid.SHORT)
+        return;
+      }
+
+      setModalVisible(false)
+      setPhone("")
+      setEmail("")
+
+      let body = {
+        id: info._id,
+        phone,
+        email,
+      }
+      postMethod("change-info", body)
+          .then((res) => {
+              if (res.success) {
+                setUser([...user, res.user])
+              } else {
+                ToastAndroid.show(res.message, ToastAndroid.SHORT)
+              }
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+    };
     return (
         <>
           <ScrollView>
@@ -27,8 +71,8 @@ function Settings(props){
                       <Image style={styles.infor__user_img} source={TDTU}/>
                       {info ? (<View style={styles.infor__user_text}>
                         <Text>{info.username}</Text>
-                        <Text>0582564360</Text>
-                        <Text>anhtien123@gmail.com</Text>
+                        <Text>{info.phone}</Text>
+                        <Text>{info.email}</Text>
                       </View>) : (<View style={styles.infor__user_text}>
                         <Text>Nothing</Text>
                         <Text>Null</Text>
@@ -36,7 +80,7 @@ function Settings(props){
                       </View>)}
                   </View>
                 </TouchableOpacity>
-                <FontAwesome5 name="pen" size={24} color="black" style={styles.item__icon}/>
+                <FontAwesome5 name="pen" size={24} color="black" style={styles.item__icon} onPress={() => setModalVisible(true)}/>
                 {/* <FontAwesomeIcon icon={faPen} style={styles.item__icon_first} /> */}
             </View>
             <View style={styles.list}>
@@ -123,12 +167,27 @@ function Settings(props){
               setModalVisible(!modalVisible);
             }}
           >
-            <View>
-              <Text>This is my modal</Text>
-              <Text onPress={() => setModalVisible(!modalVisible)}>Close</Text>
-            </View>
+            <TouchableOpacity style={styles.modal__overlay} onPress={() => setModalVisible(!modalVisible)}>
+            </TouchableOpacity>
+              <View style={styles.modal__container}>
+                <Text style={styles.modal__container_heading}>Vui lòng nhập thông tin</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) => handleChangePhone('phone', text)}
+                  placeholder="Nhập số điện thoại của bạn"
+                  value={phone}
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) => handleChangeEmail('email', text)}
+                  placeholder="Nhập email của bạn"
+                  value={email}
+                />
+                <Text style={styles.button} onPress={handleChangeInfo}>Cập Nhật</Text>
+              </View>
           </Modal>
         </>
+        // <Text>Settings</Text>
     )
 }
 
@@ -186,8 +245,61 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       marginRight: 8,
     },
-    // item__text:{
-    //   fontWeight: 600,
-    // }
+    modal__container: {
+      width: '100%',
+      backgroundColor: '#fff',
+      position: 'absolute',
+      bottom: 0,
+      height: 450,
+      borderColor: '#ccc',
+      borderWidth: 1,
+      display: 'flex',
+      alignItems: 'center',
+      zIndex: 1,
+    },
+    modal__overlay: {
+      backgroundColor: 'transparent',
+      position: 'absolute',
+      bottom: 450,
+      top: 0,
+      left: 0,
+      right: 0,
+    },
+    modal__container_heading: {
+      width: '100%',
+      textAlign: 'center',
+      lineHeight: 40,
+      color: 'blue',
+      fontSize: 20,
+      fontWeight: '550',
+      marginVertical: 30,
+    },
+    input: {
+      height: 40,
+      margin: 12,
+      width: '90%',
+      paddingVertical: 10,
+      paddingLeft: 24,
+      borderRadius: 24,
+      backgroundColor: '#fff',
+      color: 'black',
+      outline: 'none',
+      borderColor: '#ccc',
+      borderWidth: 1,
+    },
+    button: {
+      height: 40,
+      marginTop: 50,
+      paddingVertical: 10,
+      paddingHorizontal: 100,
+      borderRadius: 24,
+      backgroundColor: '#fff',
+      color: 'black',
+      outline: 'none',
+      borderColor: 'green',
+      borderWidth: 1,
+      textTransform: 'uppercase',
+      color: 'green',
+    },
 })
 

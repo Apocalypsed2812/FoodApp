@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TOKEN_NAME } from "../credentials";
 import {GlobalState} from '../context/GlobalState'
-//import Login from '../components/Login';
 import TDTU from '../assets/logo_tdtu.jpg'
 
 export default function LoginScreen({navigation}){
@@ -35,38 +34,8 @@ export default function LoginScreen({navigation}){
                 ToastAndroid.show(error, ToastAndroid.SHORT);
               }
           } else {
-              // Swal.fire({
-              //     title: "Error",
-              //     text: response.message,
-              //     icon: "error",
-              // });
-              // console.log("Co loi xay ra")
               ToastAndroid.show(response.message, ToastAndroid.SHORT)
           }
-            // .then((response) => {
-            //     // console.log("Response là:", response)
-            //     if (response.success) {
-            //         try{
-            //           console.log("Token là: ", response.token)
-            //           await AsyncStorage.setItem(TOKEN_NAME, JSON.stringify(response.token));
-            //           console.log(await AsyncStorage.getItem(TOKEN_NAME));
-            //           setIsLogin(true);
-            //           navigation.navigate("Home");
-            //         }
-            //         catch(error){
-            //           ToastAndroid.show(error, ToastAndroid.SHORT);
-            //         }
-            //     } else {
-            //         // Swal.fire({
-            //         //     title: "Error",
-            //         //     text: response.message,
-            //         //     icon: "error",
-            //         // });
-            //         // console.log("Co loi xay ra")
-            //         ToastAndroid.show(response.message, ToastAndroid.SHORT)
-            //     }
-            // })
-            // .catch((err) => console.log(err));
     };
     const handleSubmit = (e) => {
         e.preventDefault();

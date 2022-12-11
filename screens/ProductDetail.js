@@ -50,7 +50,7 @@ export default function ProductDetail({navigation}){
                 <Text style={styles.description}>{product.description}</Text>
                 <Text style={styles.button} onPress={handleAddToCart}>
                     {/* <Feather name="shopping-cart" size={18} color="green" style={styles.icon__cart}/> */}
-                    <Text style={styles.text__cart}>Thêm vào giỏ hàng</Text>
+                    <Text style={styles.text__cart}>+ Thêm vào giỏ hàng</Text>
                 </Text>
             </View>
         </ScrollView>

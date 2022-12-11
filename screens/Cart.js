@@ -11,9 +11,14 @@ export default function CartScreen({navigation}){
     const state = useContext(GlobalState);
     const isLogin = state.UserAPI.login[0];
     const [cart, setCart] = state.UserAPI.cart;
+    const [orders, setOrders] = state.OrderAPI.orders;
+    const [user, setUser] = state.UserAPI.user;
     const [cartList, setCartList] = useState([]);
     const globalProducts = state.ProductAPI.products[0];
 
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [phone, setPhone] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
@@ -99,6 +104,63 @@ export default function CartScreen({navigation}){
     CartScreen.navigationOptions = {
       title: 'Cart'
     };
+
+    const handleChangeName = (name, value) => {
+      setName(value)
+    }
+
+    const handleChangePhone = (name, value) => {
+      setPhone(value)
+    }
+
+    const handleChangeAddress = (name, value) => {
+      setAddress(value)
+    }
+
+    const handleAddOrder = () => {
+      if (name.trim() === "") {
+        ToastAndroid.show("Tên không được trống", ToastAndroid.SHORT)
+        return;
+      }
+      if (phone.trim() === "") {
+          ToastAndroid.show("Số điện thoại không được trống", ToastAndroid.SHORT)
+          return;
+      }
+      if (address.trim() === "") {
+        ToastAndroid.show("Địa chỉ không được trống", ToastAndroid.SHORT)
+        return;
+      }
+
+      setModalVisible(false)
+      setName("")
+      setPhone("")
+      setAddress("")
+
+      let today = new Date()
+      let date = (today.getDate()) + '/' + (today.getMonth() + 1) + '/' + today.getFullYear()
+
+      let body = {
+        name,
+        phone,
+        address,
+        product: JSON.stringify(products),
+        total: totalPrice,
+        date,
+        user_id: user._id,
+      }
+      postMethod("/order/add", body)
+          .then((res) => {
+              if (res.success) {
+                  setOrders([...orders, res.order])
+                  navigation.navigate("Orders")
+              } else {
+                ToastAndroid.show(res.message, ToastAndroid.SHORT)
+              }
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+    };
     
     return ( 
         (isLogin ? (
@@ -151,23 +213,23 @@ export default function CartScreen({navigation}){
                 <Text style={styles.modal__container_heading}>Vui lòng nhập thông tin</Text>
                 <TextInput
                   style={styles.input}
-                  // onChangeText={(text) => handleChangeInput('username', text)}
+                  onChangeText={(text) => handleChangeName('name', text)}
                   placeholder="Nhập tên của bạn"
-                  //value={user.username}
+                  value={name}
                 />
                 <TextInput
                   style={styles.input}
-                  // onChangeText={(text) => handleChangeInput('password', text)}
+                  onChangeText={(text) => handleChangePhone('phone', text)}
                   placeholder="Nhập số điền thoại của bạn"
-                  //value={user.password}
+                  value={phone}
                 />
                 <TextInput
                   style={styles.input}
-                  // onChangeText={(text) => handleChangeInput('password', text)}
+                  onChangeText={(text) => handleChangeAddress('address', text)}
                   placeholder="Nhập địa chỉ của bạn"
-                  //value={user.password}
+                  value={address}
                 />
-                <Text style={styles.button}>Đặt hàng</Text>
+                <Text style={styles.button} onPress={handleAddOrder}>Đặt hàng</Text>
               </View>
           </Modal>
           </>  

@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Category from "./screens/Category";
-import Categories from "./screens/Categories";
 import Cart from "./screens/Cart";
 import Orders from "./screens/Orders";
 import Settings from "./screens/Settings";
@@ -29,9 +28,6 @@ const CategoryStack = createStackNavigator({
     },
     ProductDetail: {
         screen: ProductDetail
-    },
-    Categories: {
-        screen: Categories
     },
     Category: {
         screen: Category
@@ -101,9 +97,6 @@ const SettingStack = createStackNavigator({
     Settings: {
         screen: Settings
     },
-    // Login: {
-    //     screen: Login
-    // },
 })
 
 

@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList, Alert, Image, Text, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 
-import TDTU from '../assets/logo_tdtu.jpg';
 import {GlobalState} from '../context/GlobalState'
-import ProductItem from '../components/ProductItem';
 import { getMethod, postMethod } from "../utils/fetchData";
 
 export default function Category({navigation}) {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import 'react-native-gesture-handler';
 
@@ -18,6 +17,3 @@ export default class App extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  
-});
