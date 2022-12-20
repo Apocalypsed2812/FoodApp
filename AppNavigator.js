@@ -9,9 +9,11 @@ import Orders from "./screens/Orders";
 import Settings from "./screens/Settings";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import ChangePassword from "./screens/ChangePassword";
 import FoodStore from "./screens/FoodStore";
 import ProductDetail from "./screens/ProductDetail";
 import Home from "./screens/Home";
+import Search from "./screens/Search";
 
 const color = {
     ACTIVE: '#147efb',
@@ -46,6 +48,12 @@ const CategoryStack = createStackNavigator({
     },
     Register: {
         screen: Register
+    },
+    ChangePassword: {
+        screen: ChangePassword
+    },
+    Search: {
+        screen: Search
     },
 })
 

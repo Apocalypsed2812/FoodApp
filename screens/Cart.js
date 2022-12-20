@@ -1,6 +1,5 @@
 import React, {useState, useContext, useEffect} from "react";
-import axios from 'axios';
-import { Text, FlatList, StyleSheet, View, Button, Image, ScrollView, ToastAndroid, Modal, TouchableOpacity, TextInput } from 'react-native';
+import { Text, StyleSheet, View, Button, Image, ScrollView, ToastAndroid, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 import TDTU from '../assets/logo_tdtu.jpg';
@@ -56,9 +55,9 @@ export default function CartScreen({navigation}){
             });
         });
     }
-    console.log("Cart la: ", cart)
-    console.log("CartList la: ", cartList)
-    console.log("Products la: ", products)
+    // console.log("Cart la: ", cart)
+    // console.log("CartList la: ", cartList)
+    // console.log("Products la: ", products)
 
     let totalPrice = 0;
     products.forEach((product) => {

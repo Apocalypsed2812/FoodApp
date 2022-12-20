@@ -1,31 +1,51 @@
 import React, {useState, useContext} from "react";
-import {Image, Text, View, StyleSheet, TextInput } from 'react-native'
+import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//import SkiiImage from '../assets/skii.png'
-import TDTU from '../assets/logo_tdtu.jpg'
-import { getMethod, postMethod } from "../utils/fetchData";
+// import { getMethod, postMethod } from "../utils/fetchData";
 import {GlobalState} from '../context/GlobalState'
 
-function Header({checkLogin, settings}){
+function Header({checkLogin, settings, navigationSearch}){
     const state = useContext(GlobalState)
+    const setProductsShow = state.ProductAPI.productsShow[1];
     const [isLogin, setIsLogin] = state.UserAPI.login;
-    const [user, setUser] = state.UserAPI.user;
-    // console.log("User", user)
-    // const logout = () => {
-    //   AsyncStorage.clear();
-    //   setIsLogin(false)
-    //   navigation.navigate('Login')
-    // }
+    const products = state.ProductAPI.products[0];
+    const [search, setSearch] = useState("");
+
+    const handleChangeInput = (name, value) => {
+      setSearch(value);
+    };
+
+    const handleSearch = () => {
+      console.log("Đã vào search")
+      console.log(search)
+      let newProduct = products;
+      if (search !== "") {
+        // newProduct = newProduct.filter(
+        //     (p) => p.name.indexOf(search) !== -1
+        // );
+        newProduct = newProduct.filter(
+          (p) => p.name === search
+      );
+      }
+      setProductsShow(newProduct)
+      navigationSearch
+    }
+    
     return (
         <View style={styles.container}>
             <TextInput
               style={styles.input}
-              //onChangeText={onChangeText}
+              onChangeText={(text) => handleChangeInput('search', text)}
               placeholder="Tìm kiếm"
               //value={"Nhập username"}
+              type="submit"
             />
+            <TouchableOpacity onPress={navigationSearch}>
+              <Text style={styles.search}>
+                Tìm
+              </Text>
+            </TouchableOpacity>
             {isLogin 
             ? 
             <FontAwesome5 

@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from 'axios';
-import { Text, View, StyleSheet, FlatList, Image, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
+import React, { useContext } from "react";
+import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 
 import TDTU from '../assets/logo_tdtu.jpg';
 import {GlobalState} from '../context/GlobalState'
-import { getMethod, postMethod } from "../utils/fetchData";
+import { postMethod } from "../utils/fetchData";
 
 export default function FoodStoreScreen({navigation}){
     FoodStoreScreen.navigationOptions = ({navigation}) => {

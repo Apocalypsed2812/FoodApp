@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from 'axios';
+import React, { useContext } from "react";
 import {Text, View, StyleSheet, FlatList, Image} from 'react-native'
 
 import {GlobalState} from '../context/GlobalState';

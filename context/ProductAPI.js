@@ -13,7 +13,7 @@ function UserAPI() {
             .then(res => {
                 if (res.success) {
                     setProducts(res.products)
-                    setProductsShow(res.products)
+                    //setProductsShow(res.products)
                 }
             })
             .catch(err => {

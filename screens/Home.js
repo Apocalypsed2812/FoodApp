@@ -1,16 +1,10 @@
-import React, { useContext } from "react";
-import { View, Text, FlatList, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity } from 'react-native';
-// import AsyncStorage from '@react-native-community/async-storage';
-//import { getDatabase, ref, child, get, set, remove } from 'firebase/database';
-// import { storage } from '~/firebase.js';
-// import app from '../firebase.js';
+import React, { useContext, useEffect } from "react";
+import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import TDTU from '../assets/logo_tdtu.jpg'
 import banner from '../assets/banner.jpg'
-import { getMethod, postMethod } from "../utils/fetchData";
+// import { getMethod, postMethod } from "../utils/fetchData";
 import {GlobalState} from '../context/GlobalState'
-import Home from '../components/Home';
 import Header from '../components/Header';
 
 export default function HomeScreen({navigation}){
@@ -21,29 +15,12 @@ export default function HomeScreen({navigation}){
     const [products, setProducts] = state.ProductAPI.products;
     const [categorys, setCategorys] = state.CategoryAPI.categorys;
     const [foodStores, setFoodStores] = state.FoodStoreAPI.foodStores;
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
     const [user, setUser] = state.UserAPI.user;
-    // console.log(products)
 
     // useEffect(() => {
-    //   const getProducts = async () => {
-    //     let response = await getMethod("product")
-    //     return response
-    // }
-    // getProducts()
-    //     .then(res => {
-    //         if (res.success) {
-    //             console.log(res.products)
-    //             setProducts(res.products)
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
+    //   setProductsShow([])
     // }, [])
-
-    const handleProductDetail = () => {
-      navigation.navigate('Login')
-    }
 
     HomeScreen.navigationOptions = ({ navigation, screenProps }) => ({
           headerTitle: 
@@ -52,89 +29,200 @@ export default function HomeScreen({navigation}){
             checkLogin={() => navigation.navigate('Login')} 
             // user={navigation.state.params}
             settings={() => navigation.navigate('Settings')} 
+            navigationSearch={() => navigation.navigate('Search')}
           />,
           headerStyle: {backgroundColor: '#5fb8f4'},
       });
 
-      return (
-          <ScrollView>
-            <View style={styles.container}>
-              <Image style={styles.image} source={banner}/>
-              {user ? <Text>{user.username}</Text> : <Text>Nothing</Text>}
-              <View style={styles.categories__row}>
-                  {categorys.map((item, index) => (
-                      <TouchableOpacity style={styles.categories__col_3} key={index} onPress={() => {navigation.navigate("Category", {categoryName: item.name})}}>
-                          <View style={styles.category}>
-                              <Image style={styles.category__image} source={{uri: item.image_url}}/>
-                              <Text style={styles.category__text}>{item.name}</Text>
-                          </View>
-                      </TouchableOpacity> 
-                  ))} 
-                  {/* <TouchableOpacity style={styles.categories__col_3}>
-                          <View style={styles.category}>
-                              <Image style={styles.category__image} source={TDTU}/>
-                              <Text style={styles.category__text}>Salad</Text>
-                          </View>
-                  </TouchableOpacity>  */} 
-              </View>
+      console.log("ProductShow là: ", productsShow.length)
 
-              <View style={styles.eat__today}>
-                  <Text style={styles.eat__today_title}>Hôm nay ăn gì ?</Text>
-                  <ScrollView
-                  horizontal={true}
-                  >
-                    {products.map((item, index) => (
-                      <TouchableOpacity style={styles.product} key={index} onPress={() => {navigation.navigate("ProductDetail", {product: item})}}>
-                        <View style={{flex: 2}}>
-                          <Image source={{uri: item.image_url}} style={styles.product_image}/>
-                        </View>
-                        <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
-                          <Text>{item.name}</Text>
+      return (
+          // (productsShow.length > 0
+          //   ? 
+          //   (
+          //     <ScrollView>
+          //       <View style={styles.container}>
+          //         <Image style={styles.image} source={banner}/>
+          //         <View style={styles.categories__row}>
+          //           {productsShow.map((item, index) => (
+          //             <TouchableOpacity style={styles.product__col_6} key={index} onPress={() => {navigation.navigate("ProductDetail", {product: item})}}>
+          //                 <View style={styles.product__search}>
+          //                     <Image style={styles.product__image_search} source={{uri: item.image_url}}/>
+          //                     <Text style={styles.product__title}>{item.name}</Text>
+          //                     <Text style={styles.product__price}>{item.price} đ</Text>
+          //                     {/* <Text style = {styles.product__btn} onPress={() => handleAddToCart(item._id)}>
+          //                         Thêm
+          //                     </Text> */}
+          //                 </View>
+          //             </TouchableOpacity> 
+          //         ))} 
+          //         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          //           <Text style={styles.combackHome}>Quay về trang chủ</Text>
+          //         </TouchableOpacity>
+                       
+          //         </View>
+          //       </View>
+          //     </ScrollView>
+          //   ) 
+          //   : 
+          //   (
+          //     <ScrollView>
+          //     <View style={styles.container}>
+          //       <Image style={styles.image} source={banner}/>
+          //       {user ? <Text>{user.username}</Text> : <Text>Nothing</Text>}
+          //       <View style={styles.categories__row}>
+          //           {categorys.map((item, index) => (
+          //               <TouchableOpacity style={styles.categories__col_3} key={index} onPress={() => {navigation.navigate("Category", {categoryName: item.name})}}>
+          //                   <View style={styles.category}>
+          //                       <Image style={styles.category__image} source={{uri: item.image_url}}/>
+          //                       <Text style={styles.category__text}>{item.name}</Text>
+          //                   </View>
+          //               </TouchableOpacity> 
+          //           ))} 
+          //           {/* <TouchableOpacity style={styles.categories__col_3}>
+          //                   <View style={styles.category}>
+          //                       <Image style={styles.category__image} source={TDTU}/>
+          //                       <Text style={styles.category__text}>Salad</Text>
+          //                   </View>
+          //           </TouchableOpacity>  */} 
+          //       </View>
+
+          //       <View style={styles.eat__today}>
+          //           <Text style={styles.eat__today_title}>Hôm nay ăn gì ?</Text>
+          //           <ScrollView
+          //           horizontal={true}
+          //           >
+          //             {products.map((item, index) => (
+          //               <TouchableOpacity style={styles.product} key={index} onPress={() => {navigation.navigate("ProductDetail", {product: item})}}>
+          //                 <View style={{flex: 2}}>
+          //                   <Image source={{uri: item.image_url}} style={styles.product_image}/>
+          //                 </View>
+          //                 <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
+          //                   <Text>{item.name}</Text>
+          //                 </View>
+          //               </TouchableOpacity>
+          //             ))}
+          //             {/* <TouchableOpacity style={styles.product} onPress={() => {navigation.navigate("ProductDetail")}}>
+          //                 <View style={{flex: 2}}>
+          //                   <Image source={TDTU} style={styles.product_image}/>
+          //                 </View>
+          //                 <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
+          //                   <Text>Salad</Text>
+          //                 </View>
+          //             </TouchableOpacity> */}
+          //           </ScrollView>
+          //       </View>
+
+          //       <View style={styles.eat__impress}>
+          //         <Text style={styles.eat__impress_title}>Quán ăn nổi bật</Text>
+          //         <View style={styles.categories__row}>
+          //           {foodStores.map((item, index) => (
+          //             <TouchableOpacity style={styles.categories__col_12} key={index} onPress={() => {navigation.navigate('FoodStore', {foodStore: item})}}>
+          //               <View style={styles.eat__impress__product}>
+          //                   <Image style={styles.eat__impress__image} source={{uri: item.image_url}} />
+          //                   <View style={styles.eat__impress__text}>
+          //                     <Text style={styles.eat__impress__name}>{item.name}</Text>
+          //                     <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
+          //                     <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
+          //                     <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
+          //                   </View>
+          //               </View>
+          //             </TouchableOpacity>
+          //           ))}
+          //           {/* <TouchableOpacity style={styles.categories__col_12} onPress={() => {navigation.navigate('FoodStore')}}>
+          //               <View style={styles.eat__impress__product}>
+          //                   <Image style={styles.eat__impress__image} source={TDTU} />
+          //                   <View style={styles.eat__impress__text}>
+          //                     <Text style={styles.eat__impress__name}>Bún đậu mắm tôm</Text>
+          //                     <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
+          //                     <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
+          //                     <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
+          //                   </View>
+          //               </View>
+          //           </TouchableOpacity> */}
+          //         </View>
+          //       </View>
+          //     </View>
+          //   </ScrollView>
+          //   ))
+          <ScrollView>
+              <View style={styles.container}>
+                <Image style={styles.image} source={banner}/>
+                {user ? <Text>{user.username}</Text> : <Text>Nothing</Text>}
+                <View style={styles.categories__row}>
+                    {categorys.map((item, index) => (
+                        <TouchableOpacity style={styles.categories__col_3} key={index} onPress={() => {navigation.navigate("Category", {categoryName: item.name})}}>
+                            <View style={styles.category}>
+                                <Image style={styles.category__image} source={{uri: item.image_url}}/>
+                                <Text style={styles.category__text}>{item.name}</Text>
+                            </View>
+                        </TouchableOpacity> 
+                    ))} 
+                    {/* <TouchableOpacity style={styles.categories__col_3}>
+                            <View style={styles.category}>
+                                <Image style={styles.category__image} source={TDTU}/>
+                                <Text style={styles.category__text}>Salad</Text>
+                            </View>
+                    </TouchableOpacity>  */} 
+                </View>
+
+                <View style={styles.eat__today}>
+                    <Text style={styles.eat__today_title}>Hôm nay ăn gì ?</Text>
+                    <ScrollView
+                    horizontal={true}
+                    >
+                      {products.map((item, index) => (
+                        <TouchableOpacity style={styles.product} key={index} onPress={() => {navigation.navigate("ProductDetail", {product: item})}}>
+                          <View style={{flex: 2}}>
+                            <Image source={{uri: item.image_url}} style={styles.product_image}/>
+                          </View>
+                          <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
+                            <Text>{item.name}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                      {/* <TouchableOpacity style={styles.product} onPress={() => {navigation.navigate("ProductDetail")}}>
+                          <View style={{flex: 2}}>
+                            <Image source={TDTU} style={styles.product_image}/>
+                          </View>
+                          <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
+                            <Text>Salad</Text>
+                          </View>
+                      </TouchableOpacity> */}
+                    </ScrollView>
+                </View>
+
+                <View style={styles.eat__impress}>
+                  <Text style={styles.eat__impress_title}>Quán ăn nổi bật</Text>
+                  <View style={styles.categories__row}>
+                    {foodStores.map((item, index) => (
+                      <TouchableOpacity style={styles.categories__col_12} key={index} onPress={() => {navigation.navigate('FoodStore', {foodStore: item})}}>
+                        <View style={styles.eat__impress__product}>
+                            <Image style={styles.eat__impress__image} source={{uri: item.image_url}} />
+                            <View style={styles.eat__impress__text}>
+                              <Text style={styles.eat__impress__name}>{item.name}</Text>
+                              <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
+                              <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
+                              <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
+                            </View>
                         </View>
                       </TouchableOpacity>
                     ))}
-                    {/* <TouchableOpacity style={styles.product} onPress={() => {navigation.navigate("ProductDetail")}}>
-                        <View style={{flex: 2}}>
-                          <Image source={TDTU} style={styles.product_image}/>
-                        </View>
-                        <View style={{flex: 1, paddingLeft: 10, paddingTop: 10}}>
-                          <Text>Salad</Text>
+                    {/* <TouchableOpacity style={styles.categories__col_12} onPress={() => {navigation.navigate('FoodStore')}}>
+                        <View style={styles.eat__impress__product}>
+                            <Image style={styles.eat__impress__image} source={TDTU} />
+                            <View style={styles.eat__impress__text}>
+                              <Text style={styles.eat__impress__name}>Bún đậu mắm tôm</Text>
+                              <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
+                              <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
+                              <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
+                            </View>
                         </View>
                     </TouchableOpacity> */}
-                  </ScrollView>
-              </View>
-
-              <View style={styles.eat__impress}>
-                <Text style={styles.eat__impress_title}>Quán ăn nổi bật</Text>
-                <View style={styles.categories__row}>
-                  {foodStores.map((item, index) => (
-                    <TouchableOpacity style={styles.categories__col_12} key={index} onPress={() => {navigation.navigate('FoodStore', {foodStore: item})}}>
-                      <View style={styles.eat__impress__product}>
-                          <Image style={styles.eat__impress__image} source={{uri: item.image_url}} />
-                          <View style={styles.eat__impress__text}>
-                            <Text style={styles.eat__impress__name}>{item.name}</Text>
-                            <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
-                            <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
-                            <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
-                          </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                  {/* <TouchableOpacity style={styles.categories__col_12} onPress={() => {navigation.navigate('FoodStore')}}>
-                      <View style={styles.eat__impress__product}>
-                          <Image style={styles.eat__impress__image} source={TDTU} />
-                          <View style={styles.eat__impress__text}>
-                            <Text style={styles.eat__impress__name}>Bún đậu mắm tôm</Text>
-                            <Text style={styles.eat__impress__des}>$$$ Ngon chuẩn Việt</Text>
-                            <Text style={styles.eat__impress__trans}>Giao hàng trong 17 phút</Text>
-                            <Text style={styles.eat__impress__trans}>Giảm đến 35K cho đơn hàng</Text>
-                          </View>
-                      </View>
-                  </TouchableOpacity> */}
+                  </View>
                 </View>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
       )
 }
 
@@ -277,5 +365,49 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     resizeMode: 'cover',
-  }
+  },
+  product__search: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: {width: 0, height: 0},
+    paddingVertical: 16,
+  },
+  product__image_search: {
+    // flex: 1,
+    // width: null,
+    // height: null,
+    // resizeMode: 'cover',
+    width: 100,
+    height: 64,
+  },
+  product__title: {
+      fontSize: 20,
+      marginVertical: 16,
+      height: 30,
+  },
+  product__price: {
+
+  },
+  product__btn: {
+    width: '100%',
+    backgroundColor: 'transparent',
+    color: 'green',
+    borderColor: 'green',
+    borderWidth: 1,
+    borderRadius: 16,
+    marginVertical: 16,
+    textAlign: 'center',
+    paddingVertical: 4,
+  },
+  combackHome: {
+    width: '100%',
+    textAlign: 'center',
+  },
 })

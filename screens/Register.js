@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ToastAndroid } from 'react-native'
+import React, { useState } from "react";
+import { Image, Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid } from 'react-native'
 
 import { getMethod, postMethod } from "../utils/fetchData";
 
@@ -91,12 +91,14 @@ export default function RegisterScreen({navigation}){
               onChangeText={(text) => handleChangeInput('password', text)}
               placeholder="Nhập password"
               value={user.password}
+              secureTextEntry={true}
             />
             <TextInput
               style={styles.input}
               onChangeText={(text) => handleChangeInput('confirmPassword', text)}
               placeholder="Nhập lại password"
               value={user.confirmPassword}
+              secureTextEntry={true}
             />
             <TextInput
               style={styles.input}

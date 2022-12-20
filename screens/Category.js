@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, FlatList, Alert, Image, Text, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 
 import {GlobalState} from '../context/GlobalState'
-import { getMethod, postMethod } from "../utils/fetchData";
+import { postMethod } from "../utils/fetchData";
 
 export default function Category({navigation}) {
     Category.navigationOptions = ({navigation}) => {

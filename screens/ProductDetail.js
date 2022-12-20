@@ -1,10 +1,9 @@
-import React, {useState, useContext, useEffect} from "react";
-import {Text, FlatList, StyleSheet, View, Button, Image, ScrollView, ToastAndroid} from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons'; 
+import React, { useContext } from "react";
+import {Text, StyleSheet, View, Image, ScrollView, ToastAndroid} from 'react-native';
+// import { FontAwesome5 } from '@expo/vector-icons';
+// import { Feather } from '@expo/vector-icons'; 
 
-import TDTU from '../assets/logo_tdtu.jpg';
-import { getMethod, postMethod } from "../utils/fetchData";
+import { postMethod } from "../utils/fetchData";
 import {GlobalState} from '../context/GlobalState';
 
 export default function ProductDetail({navigation}){

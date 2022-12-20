@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Image, Text, View, StyleSheet, TextInput, Button, Alert, TouchableOpacity, ToastAndroid } from 'react-native'
-import { getMethod, postMethod } from "../utils/fetchData";
-// import AsyncStorage from '@react-native-community/async-storage';
+import React, { useState, useContext } from "react";
+import { Image, Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid } from 'react-native'
+import { postMethod } from "../utils/fetchData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TOKEN_NAME } from "../credentials";
@@ -69,6 +68,7 @@ export default function LoginScreen({navigation}){
                 onChangeText={(text) => handleChangeInput('password', text)}
                 placeholder="Nhập password"
                 value={user.password}
+                secureTextEntry={true}
               />
               <Text style={styles.forgot}>Quên mật khẩu ?</Text>
             </View>

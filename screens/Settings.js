@@ -42,6 +42,10 @@ export default function SettingsScreen({navigation}){
       navigation.navigate('Home')
     }
 
+    const handleChangePassword = () => {
+      navigation.navigate('ChangePassword')
+    }
+
     SettingsScreen.navigationOptions = {
         title: 'Settings'
     }
@@ -166,6 +170,15 @@ export default function SettingsScreen({navigation}){
                     <Text style={styles.item__text}>Giao hàng cực nhanh</Text>
                 </View>
                 <Entypo name="chevron-small-right" size={30} color="black" />
+              </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleChangePassword}>
+              <View style={styles.item}>
+                <View style={styles.item__first}>
+                    <FontAwesome name="list-alt" size={24} color="black" style={styles.item__icon_first} />
+                    <Text style={styles.item__text}>Đổi mật khẩu</Text>
+                </View>
+                <Entypo name="chevron-small-right" size={24} color="black" />
               </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleLogOut}>
