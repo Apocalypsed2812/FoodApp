@@ -11,7 +11,8 @@ export default function LoginScreen({navigation}){
     const [user, setUser] = useState({ username: "", password: "" });
     const state = useContext(GlobalState)
     const [isLogin, setIsLogin] = state.UserAPI.login;
-    console.log("Is Login Page: ", isLogin)
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
+    // console.log("Is Login Page: ", isLogin)
     const handleChangeInput = (name, value) => {
         setUser({
             ...user,

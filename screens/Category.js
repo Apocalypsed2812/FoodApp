@@ -15,6 +15,7 @@ export default function Category({navigation}) {
     const isLogin = state.UserAPI.login[0];
     const [cart, setCart] = state.UserAPI.cart;
     const [products, setProducts] = state.ProductAPI.products;
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
 
     let categoryName = navigation.getParam('categoryName')
     

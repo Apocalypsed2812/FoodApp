@@ -14,6 +14,7 @@ export default function ProductDetail({navigation}){
     const state = useContext(GlobalState);
     const isLogin = state.UserAPI.login[0];
     const [cart, setCart] = state.UserAPI.cart;
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
 
     let product = navigation.getParam('product');
     

@@ -13,7 +13,6 @@ import ChangePassword from "./screens/ChangePassword";
 import FoodStore from "./screens/FoodStore";
 import ProductDetail from "./screens/ProductDetail";
 import Home from "./screens/Home";
-import Search from "./screens/Search";
 
 const color = {
     ACTIVE: '#147efb',
@@ -51,9 +50,6 @@ const CategoryStack = createStackNavigator({
     },
     ChangePassword: {
         screen: ChangePassword
-    },
-    Search: {
-        screen: Search
     },
 })
 

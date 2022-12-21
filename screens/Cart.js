@@ -14,6 +14,7 @@ export default function CartScreen({navigation}){
     const [user, setUser] = state.UserAPI.user;
     const [cartList, setCartList] = useState([]);
     const globalProducts = state.ProductAPI.products[0];
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
 
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -48,7 +49,7 @@ export default function CartScreen({navigation}){
         // setCartProduct(true);
         globalProducts.forEach((product) => {
             cart.forEach((p) => {
-                console.log(p);
+                // console.log(p);
                 if (p.id === product._id) {
                     products.push({ ...product, quantity: p.quantity });
                 }

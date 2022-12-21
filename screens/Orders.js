@@ -14,6 +14,7 @@ export default function OrdersScreen({navigation}){
     const isLogin = state.UserAPI.login[0];
     const [orders, setOrders] = state.OrderAPI.orders;
     const [user, setUser] = state.UserAPI.user;
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
 
     let orderList = []
     if(user){

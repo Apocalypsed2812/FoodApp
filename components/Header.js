@@ -1,9 +1,10 @@
 import React, {useState, useContext} from "react";
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons'; 
 
 // import { getMethod, postMethod } from "../utils/fetchData";
-import {GlobalState} from '../context/GlobalState'
+import {GlobalState} from '../context/GlobalState';
 
 function Header({checkLogin, settings, navigationSearch}){
     const state = useContext(GlobalState)
@@ -26,10 +27,13 @@ function Header({checkLogin, settings, navigationSearch}){
         // );
         newProduct = newProduct.filter(
           (p) => p.name === search
-      );
+        );
+      }
+      if(newProduct.length == 0){
+        ToastAndroid.show('Không tìm thấy sản phẩm', ToastAndroid.SHORT)
       }
       setProductsShow(newProduct)
-      navigationSearch
+      // navigationSearch
     }
     
     return (
@@ -41,10 +45,8 @@ function Header({checkLogin, settings, navigationSearch}){
               //value={"Nhập username"}
               type="submit"
             />
-            <TouchableOpacity onPress={navigationSearch}>
-              <Text style={styles.search}>
-                Tìm
-              </Text>
+            <TouchableOpacity onPress={handleSearch} style={styles.icon__search}>
+              <Feather name="search" size={24} color="black" />
             </TouchableOpacity>
             {isLogin 
             ? 
@@ -90,5 +92,9 @@ const styles = StyleSheet.create({
       cursor: 'pointer',
       color: '#fff',
       fontSize: 16,
+    },
+    icon__search:{
+      position: 'absolute',
+      left: '65%',
     }
 })

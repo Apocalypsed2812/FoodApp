@@ -19,8 +19,7 @@ export default function SettingsScreen({navigation}){
     const state = useContext(GlobalState)
     const [isLogin, setIsLogin] = state.UserAPI.login;
     const [user, setUser] = state.UserAPI.user
-
-    console.log("User la", user)
+    const [productsShow, setProductsShow] = state.ProductAPI.productsShow;
     
     const handleLogOut = async () => {
       await AsyncStorage.removeItem(TOKEN_NAME)
@@ -175,7 +174,7 @@ export default function SettingsScreen({navigation}){
               <TouchableOpacity onPress={handleChangePassword}>
               <View style={styles.item}>
                 <View style={styles.item__first}>
-                    <FontAwesome name="list-alt" size={24} color="black" style={styles.item__icon_first} />
+                    <Entypo name="lock" size={24} color="black" style={styles.item__icon_first}/>
                     <Text style={styles.item__text}>Đổi mật khẩu</Text>
                 </View>
                 <Entypo name="chevron-small-right" size={24} color="black" />
