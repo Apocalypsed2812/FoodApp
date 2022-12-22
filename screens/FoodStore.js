@@ -112,48 +112,26 @@ export default function FoodStoreScreen({navigation}){
             </View>
             <Text style={styles.title}>Món Chính</Text>
             <View style={styles.product__row}>
-                {/* {products.map((item, index) => ( */}
-                <View style={styles.product__col_12}>
-                    <View style={styles.product__primary}>
-                        <View>
-                            <View style={{flex: 2}}>
-                                <Text style={styles.product__title}>Bún chả Hà Nội</Text>
-                                <Text style={styles.product__price}>25.000 đ</Text>
+                {productList.map((item, index) => ( 
+                    <View style={styles.product__col_12} key={index}>
+                        <View style={styles.product__primary}>
+                            <View>
+                                <View style={{flex: 2}}>
+                                    <Text style={styles.product__title}>{item.name}</Text>
+                                    <Text style={styles.product__price}>{item.price} đ</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <View style={{flex: 2}}>
+                                    <Image style={styles.product__primary__image} source={{uri: item.image_url}}/>
+                                </View>
+                                <Text style = {styles.product__primary__btn} onPress={() => handleAddToCart(item._id)}>
+                                    Thêm
+                                </Text>
                             </View>
                         </View>
-                        <View>
-                            <View style={{flex: 2}}>
-                                <Image style={styles.product__primary__image} source={TDTU}/>
-                            </View>
-                            <Text style = {styles.product__primary__btn} onPress={handleAddToCart}>
-                                Thêm
-                            </Text>
-                        </View>
-                    </View>
-                </View> 
-                    {/* ))}  */}
-            </View>
-            <View style={styles.product__row}>
-                {/* {products.map((item, index) => ( */}
-                <View style={styles.product__col_12}>
-                    <View style={styles.product__primary}>
-                        <View>
-                            <View style={{flex: 2}}>
-                                <Text style={styles.product__title}>Bún chả Hà Nội</Text>
-                                <Text style={styles.product__price}>25.000 đ</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View style={{flex: 2}}>
-                                <Image style={styles.product__primary__image} source={TDTU}/>
-                            </View>
-                            <Text style = {styles.product__primary__btn} onPress={handleAddToCart}>
-                                Thêm
-                            </Text>
-                        </View>
-                    </View>
-                </View> 
-                    {/* ))}  */}
+                    </View> 
+                ))} 
             </View>
           </View>
       </ScrollView>
