@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginVertical: 16,
         height: 30,
+        width: 200,
     },
     product__price: {
 

@@ -37,7 +37,7 @@ export default function HomeScreen({navigation}){
           headerStyle: {backgroundColor: '#5fb8f4'},
       });
 
-      console.log("ProductShow là: ", productsShow.length)
+      // console.log("ProductShow là: ", productsShow.length)
 
       return (
           (productsShow.length > 0
@@ -72,7 +72,7 @@ export default function HomeScreen({navigation}){
               <ScrollView>
               <View style={styles.container}>
                 <Image style={styles.image} source={banner}/>
-                {user ? <Text>{user.username}</Text> : <Text>Nothing</Text>}
+                <Text>51900444 - 51900333</Text>
                 <View style={styles.categories__row}>
                     {categorys.map((item, index) => (
                         <TouchableOpacity style={styles.categories__col_3} key={index} onPress={() => {navigation.navigate("Category", {categoryName: item.name})}}>

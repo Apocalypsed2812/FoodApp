@@ -13,7 +13,7 @@ export default function ChangePasswordScreen({navigation}){
   const [user, setUser] = state.UserAPI.user;
 
   const [users, setUsers] = useState({
-      username: user.username,
+      username: "",
       password: "",
       confirmPassword: "",
       newPassword: "",
